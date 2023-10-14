@@ -12,7 +12,7 @@ const AddUser = () => {
         const photo = e.target.photo.value
         const newCoffee = {name,quantity,supplier,taste,category,details,photo}
         console.log(newCoffee);
-        fetch("http://localhost:5000/coffee",{
+        fetch("https://coffee-store-server-br2197btc-mahfuj113.vercel.app/coffee",{
             method: "POST",
             headers: {"Content-type": "application/json"},
             body: JSON.stringify(newCoffee)
