@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { AuthContext } from "../providers/AuthProvider";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 const SignUp = () => {
     const {signUp} = useContext(AuthContext)
@@ -16,20 +17,28 @@ const SignUp = () => {
                 console.log(result.user);
                 const createAt = result.user?.metadata?.creationTime;
                 const user = {email , createdAt: createAt}
-                fetch("https://coffee-store-server-br2197btc-mahfuj113.vercel.app/users",{
-                    method: "POST",
-                    headers: {"Content-type" : "application/json"},
-                    body: JSON.stringify(user)
-                })
-                .then(res => res.json())
+                //using axios
+                axios.post("http://localhost:5000/users",{user})
                 .then(data => {
-                    console.log(data);
-                    Swal.fire(
-                        'Success!',
-                        'You successfully sign Up.',
-                        'success'
-                    )
-                })
+                    if(data.data.insertedId){
+                        console.log("Data successfully added");
+                    }
+                });
+                //using fetch
+                // fetch("http://localhost:5000/users",{
+                //     method: "POST",
+                //     headers: {"Content-type" : "application/json"},
+                //     body: JSON.stringify(user)
+                // })
+                // .then(res => res.json())
+                // .then(data => {
+                //     console.log(data);
+                //     Swal.fire(
+                //         'Success!',
+                //         'You successfully sign Up.',
+                //         'success'
+                //     )
+                // })
             })
             .catch(error => {
                 console.log(error);

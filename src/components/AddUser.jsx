@@ -1,3 +1,4 @@
+import axios from 'axios';
 import Swal from 'sweetalert2'
 
 const AddUser = () => {
@@ -12,23 +13,29 @@ const AddUser = () => {
         const photo = e.target.photo.value
         const newCoffee = {name,quantity,supplier,taste,category,details,photo}
         console.log(newCoffee);
-        fetch("https://coffee-store-server-br2197btc-mahfuj113.vercel.app/coffee",{
-            method: "POST",
-            headers: {"Content-type": "application/json"},
-            body: JSON.stringify(newCoffee)
-        })
-        .then(res => res.json())
+        //using axios
+        axios("http://localhost:5000/coffee",{newCoffee})
         .then(data => {
-            console.log(data);
-            if(data.insertedId){
-                Swal.fire({
-                    title: 'Success',
-                    text: 'Do you want to continue',
-                    icon: 'success',
-                    confirmButtonText: 'Cool'
-                  })
-            }
+            console.log(data.data);
         })
+        //using fetch
+        // fetch("http://localhost:5000/coffee",{
+        //     method: "POST",
+        //     headers: {"Content-type": "application/json"},
+        //     body: JSON.stringify(newCoffee)
+        // })
+        // .then(res => res.json())
+        // .then(data => {
+        //     console.log(data);
+        //     if(data.insertedId){
+        //         Swal.fire({
+        //             title: 'Success',
+        //             text: 'Do you want to continue',
+        //             icon: 'success',
+        //             confirmButtonText: 'Cool'
+        //           })
+        //     }
+        // })
     }
     return (
         <div className="bg-[#F4F3F0] p-28">

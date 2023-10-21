@@ -1,25 +1,36 @@
-import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import { data } from "autoprefixer";
 import { useEffect, useState } from "react";
-import { Link, useLoaderData } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
-const Users = () => {
-    const users = useLoaderData()
-    const [user, setUser] = useState(users)
+const Users2 = () => {
 
-    // useEffect(() => {
-    //     axios.get('/users')
-    //     .then(data => {
-    //         console.log(data);
-    //     })
-    // },[])
-    // useEffect(() => {
-    //     fetch()
-    //     .then()
-    //     .then()
-    // },[])
-    
+    const {isPending,isError,error, data: user} = useQuery({queryKey: ['users'],
+        queryFn: async () => {
+            const res = await fetch("http://localhost:5000/users")
+            return res.json()
+        }
+    })
+    console.log(data);
+
+    if(isPending){
+        return <span className="loading loading-spinner text-primary"></span>
+    }
+    if(isError){
+        return <p>{error.messa}</p>
+    } 
+        // const [user,setUser] = useState([])
+        // useEffect(() => {
+        //     fetch("http://localhost:5000/users")
+        //     .then(res => res.json())
+        //     .then(data => {
+        //         setUser(data);
+        //     })
+        // },[])
+
     const handleDelete = id => {
+
 
         Swal.fire({
             title: 'Are you sure?',
@@ -53,9 +64,7 @@ const Users = () => {
         })
     }
     return (
-        <div>
-            <h2>Users {user.length}</h2>
-            <div className="overflow-x-auto">
+        <div className="overflow-x-auto">
                 <table className="table">
                     {/* head */}
                     <thead>
@@ -68,7 +77,7 @@ const Users = () => {
                         </tr>
                     </thead>
                     {
-                        user.map(user => <tbody key={user._id}>
+                        user?.map(user => <tbody key={user._id}>
                             <tr>
                                 <th>1</th>
                                 <td>{user.email}</td>
@@ -87,8 +96,7 @@ const Users = () => {
                     }
                 </table>
             </div>
-        </div>
     );
 };
 
-export default Users;
+export default Users2;

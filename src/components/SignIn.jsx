@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { AuthContext } from "../providers/AuthProvider";
 import { useLoaderData, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 const SignIn = () => {
     const {login} = useContext(AuthContext)
@@ -19,20 +20,27 @@ const SignIn = () => {
             const lastSignIn = result.user?.metadata?.lastSignInTime;
             const user = {email, lastSignIn} 
             console.log(user);
-            fetch(`https://coffee-store-server-br2197btc-mahfuj113.vercel.app/users`,{
-                method: "PATCH",
-                headers: {"content-type": "application/json"},
-                body: JSON.stringify(user)
-            })
-            .then(res => res.json())
+            //using axios
+            axios.patch("http://localhost:5000/users",user)
             .then(data => {
-                console.log(data);
-                Swal.fire(
-                    'Success!',
-                    'You successfully sign Up.',
-                    'success'
-                )
+                console.log(data.data);
             })
+            
+            //using fetch
+            // fetch(`http://localhost:5000/users`,{
+            //     method: "PATCH",
+            //     headers: {"content-type": "application/json"},
+            //     body: JSON.stringify(user)
+            // })
+            // .then(res => res.json())
+            // .then(data => {
+            //     console.log(data);
+            //     Swal.fire(
+            //         'Success!',
+            //         'You successfully sign Up.',
+            //         'success'
+            //     )
+            // })
         })
         .catch(error => {
             console.log(error);
